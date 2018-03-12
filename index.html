@@ -1,0 +1,968 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Jaga Bjeńkova</title>
+    <script src="src/jquery-1.10.2.js"></script>
+
+    <!-- thumbs photos slide -->
+    <link rel="stylesheet" type="text/css" href="src/slide-plugin/slick.css" />
+    <link rel="stylesheet" type="text/css" href="src/slide-plugin/slick-theme.css" />
+    <script src="src/slide-plugin/slick.min.js"></script>
+
+    <!-- full screen gallery-->
+    <link rel="stylesheet" href="src/gallery-plugin/photoswipe.css">
+    <link rel="stylesheet" href="src/gallery-plugin/default-skin.css">
+    <script src="src/gallery-plugin/photoswipe.js"></script>
+    <script src="src/gallery-plugin/photoswipe-ui-default.js"></script>
+
+    <!--layout - rozmieszczenie elementów-->
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            margin: 0px;
+        }
+
+        #bodyHolder {
+            min-height: 100%;
+            position: relative;
+        }
+
+        #bodyHolder > div {
+            margin: auto;
+            max-width: 1150px;
+        }
+
+        #container {
+            padding-bottom: 50px;
+            margin: auto;
+            max-width: 80%;
+        }
+
+        #footer {
+            height:50px;            
+            /*width: 100% !important;*/
+            position: absolute;
+            left: 0;
+            right:0;
+            bottom: 0;
+            text-align: center;
+            line-height:50px;
+        }
+
+        #headerFull {
+            width:1150px;
+            height:270px;
+        }
+
+        #headerSmall {
+            display:none;
+        }
+
+        @media (max-width:1150px) {
+            #headerFull {
+                display:none;
+            }
+
+            #headerSmall {
+                display: block;
+            }
+        }
+
+        #headerFull > div {
+            display:inline-block;
+        }
+
+        #logoFull {
+            position:absolute;
+            margin-top:60px;
+            margin-left:50px;
+        }
+
+        #logo-small {
+            margin-left: 5vw;
+            margin-top: 2vw;
+            min-height: 10vw;
+            min-width: 20vw;
+            height: 10vh;
+            width: 20vh;
+        }
+
+        #smallMenuIcon {
+            margin: 2vw;
+            min-height: 8%;
+            min-width: 8%;
+            height: 8%;
+            width: 8%;
+
+            margin: 2vw;
+            min-height: 8vw;
+            min-width: 8vw;
+            height: 8vh;
+            width: 8vh;
+        }
+              
+        #menuLinks {
+            position: absolute;
+            margin-top: 147px;
+            margin-left: 585px;
+        }
+
+        #socialMediaLinks {
+            position: absolute;
+            margin-top: 147px;
+            margin-left: 940px;
+        }
+    </style>
+    <!--Layout - fonts, colors and transitions-->
+    <style type="text/css">
+        @font-face {
+            font-family: CenturyGothic;
+            src: url('content/layout/CenturyGothicRegular.ttf');
+        }
+
+        body {
+            font-family: 'CenturyGothic';
+        }
+
+        ul {
+            list-style:none;
+            list-style-type:none;
+        }
+
+        li {
+            display:inline;
+        }
+
+        #smallMenu {
+            background: linear-gradient(rgba(255, 255,255, 0.3), rgba(0, 0, 0, 0.1));
+        }
+
+        #smallMenu li {
+            display:block;
+            font-size:4vh;
+        }
+
+        #menuLinks a {
+            font-weight:bold;
+            font-size:14px;
+        }
+
+        #menuLinks li + li:before {
+            margin-left: 20px;
+            content: "●";
+            margin-right: 20px;
+            color: black;
+        }
+
+        #socialMediaLinks li + li:before {
+            margin-left: 5px;
+            content:" ";
+        }
+
+        svg, a {
+            fill: #bcbcbc;
+            color: black;            //legacy #bcbcbc;
+            text-decoration: none;
+        }
+
+        svg:hover, a:hover, a:focus {
+            fill: #333333;
+            color: #333333;
+        }
+
+        svg, a {
+            transition: 200ms;
+            transition-timing-function: ease-in-out;
+            -webkit-transition: 200ms;
+            -webkit-transition-timing-function: ease-in-out;
+        }
+
+        #socialMediaLinks svg {
+            height: 20px;
+            width: 20px;
+        }
+
+        #menuButton {
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+            cursor: pointer;
+            float: right;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+            #menuButton:active {
+                animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+                transform: translate3d(0, 0, 0);
+                backface-visibility: hidden;
+                perspective: 1000px;
+            }
+
+            #footer {
+                font-size:12px;
+            }
+
+        @keyframes shake {
+            10%, 90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%, 80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%, 50%, 70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%, 60% {
+                transform: translate3d(4px, 0, 0);
+            }
+    </style>
+    <!-- Layout - projects -->
+    <style type="text/css">
+        .projectLinkContainer {
+            display: inline-block;
+            position: relative;
+        }
+
+
+
+        .projectLinkImage {
+            display: block;
+            width: 500px;
+            
+            height: auto;
+        }
+
+
+        .projectLinkOverlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0,0, 0.3);
+            overflow: hidden;
+            width: 100%;
+            height: 0;
+            transition: .5s ease;
+        }
+
+        .projectLinkContainer:hover .projectLinkOverlay {
+            height: 100%;
+        }
+
+        .projectLinkText {
+            white-space: nowrap;
+            color: white;
+            font-size: 20px;
+            position: absolute;
+            overflow: hidden;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+        }
+
+        .projectTitle {
+            font:28px;
+            width:50px;
+            margin:auto;
+        } 
+        
+        
+        .thumbContainer {
+            padding: 10px;
+        }
+
+            .thumbContainer img {
+                cursor: pointer;
+            }
+
+            img.mobileView {
+                width:100% !important;
+            }
+        @media (min-width:650px) {
+            .projectDescription {
+                width: 600px;
+            }
+        }
+    </style>
+    <!-- Layout - about -->
+    <style type="text/css">
+        #aboutInfo div {
+            padding: 30px;
+            max-width: 450px;
+            display:inline-block;
+        }
+
+        .contactContainer {
+            width: 300px;
+            margin: 50px auto;
+        }
+
+            .contactContainer img {
+                width:40px;
+                height:40px;
+            } 
+            
+            .contactContainer > div > span {
+                display: inline-block;
+                vertical-align: middle;
+                margin-left: 20px;
+            }
+    </style>
+
+
+    <!--Project item list-->
+    <script type="text/javascript">
+
+        var toliveItems = ['f1.png', 'f2.png', 'f3.png', 'f4.png', 'f5.png', 'f6.png', 'f7.png', 'f8.png', 'f9.png', 'f10.png', 'f11.png', 'f12.png', 'f13.png', 'f14.png'];
+        var whatCoverUsItems = ['p1.jpg', 'p2.jpg', 'p3.jpg', 'p4.jpg', 'p5.jpg', 'p6.jpg', 'p7.jpg', 'p8.jpg', 'p9.jpg', 'p10.jpg'];
+    </script>
+    <!--Page behaviour-->
+    <script type="text/javascript">
+        $(function () {
+
+            $("a[href=#projects]").on('click', function () {
+                $("#smallMenu").hide('slow');
+                loadProjects();
+            });
+
+            $("a[href=#about]").on('click', function () {
+                $("#smallMenu").hide('slow');
+                loadAbout();
+            });
+
+            $("a[href=#contact]").on('click', function () {
+                $("#smallMenu").hide('slow');
+                loadContact();
+            });
+
+            $("#menuButton").on('click', function () {
+                $("#smallMenu").toggle('slow');
+            });
+
+            var subpage = $(location).attr('hash');
+            if (subpage == "#about") {
+                loadAbout();
+            } else if (subpage == "#contact") {
+                loadContact();
+            } else if (subpage == "#tolive") {
+                loadProject('toLive.html', toliveItems);
+            } else if (subpage == "#thatWhatCoverUs") {
+                loadProject('thatWhatCoverUs.html', whatCoverUsItems);
+                //loadProject2();
+            } else {
+                $($("a[href=#projects]")[0]).focus();
+                loadProjects();
+            }
+
+            $('a').blur()
+        });
+
+        function loadProjects() {
+            $.ajax({
+                url: 'projects.html',
+                success: function (response) {
+                    $("#container").hide().html(response).fadeIn();
+
+
+                    var isBrowserMobile = window.mobilecheck()
+
+                    if (isBrowserMobile) {
+                        $('#container img').addClass('mobileView')
+                        $('#container a').css('margin-left','0px')
+                    }
+
+
+                    $('a[href=#tolive]').on('click', function () {
+                        loadProject('toLive.html', toliveItems);
+                    })
+                    $('a[href=#thatWhatCoverUs]').on('click', function () {
+                        loadProject('thatWhatCoverUs.html', whatCoverUsItems)
+                    })
+                }
+            });
+        }
+
+        function loadProject(url, items) {
+
+            $.ajax({
+                url: url,
+                success: function (response) {
+                    $("#container").hide().html(response);
+                    var isBrowserMobile = window.mobilecheck()
+
+                    
+                    var slideContainer = $('#slideContainer');
+                    $.each(items, function (i, val) {
+
+                        var thumbContainer = $('<div>');
+                        $(thumbContainer).addClass('thumbContainer');
+
+                        var thumb = $('<img>');
+                        thumb.attr('id', val);
+                        thumb.attr('src', 'content/thumbs/' + val);
+                        if (!isBrowserMobile) {
+                            thumb.on('click', function () { openGallery(items, i) });
+                        } else {
+                            $(thumb).addClass('mobileView')
+                        }
+
+                        $(thumbContainer).append(thumb);
+                        $(slideContainer).append(thumbContainer);
+
+                    });
+
+
+                    $("#container").append(slideContainer).fadeIn();
+
+                    if (!isBrowserMobile) {
+                        $(slideContainer).slick({
+                            dots: true,
+                            infinite: false,
+                            speed: 300,
+                            slidesToShow: 1,
+                            centerMode: false,
+                            variableWidth: true
+                        });
+                    }
+                }
+            });
+        }
+
+        function openGallery(forItems, onIndex) {
+            var pswpElement = $('.pswp')[0];
+            var options = {
+                index: onIndex
+            };
+
+            var items = [];
+            $.each(forItems, function (i, val) {
+                var galleryItem = {
+                    src: 'content/photos/' + val,
+                    w: 5906,
+                    h: 3937
+                };
+                items.push(galleryItem);
+            });
+
+            var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+            gallery.init();
+        }
+
+        function loadAbout() {
+            $.ajax({
+                url: 'about.html',
+                success: function (response) {
+                    $("#container").hide().html(response).fadeIn();
+                }
+            });
+        }
+
+        function loadContact() {
+            $.ajax({
+                url: 'contact.html',
+                success: function (response) {
+                    $("#container").hide().html(response).fadeIn();
+                }
+            });
+        }
+
+    </script>
+    <!-- Helpers -->
+    <script type="text/javascript">
+        window.mobilecheck = function () {
+            //var check = false;
+
+            if (/Mobi/.test(navigator.userAgent)) {
+                return true
+            }
+
+            return false
+
+            //(function (a) {
+            //    if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) {
+            //        check = true;
+            //    }
+            //})(navigator.userAgent || navigator.vendor || window.opera);
+            //return check;
+        };
+    </script>
+</head>
+<body>
+    <div id="bodyHolder">
+        <div id="headerFull">
+            <div id="logoFull">
+                <a href="#projects" id="projectsLink">
+                    <img id="logo" src="content/layout/logo2.png" height="140" width="340" />
+                </a>
+            </div>
+
+            <div id="menuLinks">
+                <ul class="headerLinks">
+                    <li><a href="#projects" id="projectsLink">Projects</a></li>
+                    <li><a href="#about" id="aboutLink">About</a></li>
+                    <li><a href="#contact" id="contactLink">Contact</a></li>
+                </ul>
+            </div>
+
+            <div id="socialMediaLinks">
+                <ul class="headerLinks">
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/jagabjenkova">
+                            <!--<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            width="30px" height="30px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">-->
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">
+                            <path d="M17.252,11.106V8.65c0-0.922,0.611-1.138,1.041-1.138h2.643V3.459l-3.639-0.015 c-4.041,0-4.961,3.023-4.961,4.961v2.701H10v4.178h2.336v11.823h4.916V15.284h3.316l0.428-4.178H17.252z" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://www.instagram.com/jagabjenkova">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">
+                            <path d="M22.107,3.415H7.893c-2.469,0-4.479,2.007-4.479,4.477v4.73v9.486c0,2.469,2.01,4.479,4.479,4.479h14.215 c2.469,0,4.479-2.01,4.479-4.479v-9.486v-4.73C26.586,5.421,24.576,3.415,22.107,3.415 M23.393,6.086l0.512-0.004v0.511v3.416 l-3.916,0.014l-0.012-3.928L23.393,6.086z M11.693,12.622c0.742-1.028,1.945-1.7,3.307-1.7s2.564,0.672,3.307,1.7 c0.484,0.67,0.771,1.49,0.771,2.379c0,2.248-1.828,4.078-4.078,4.078c-2.248,0-4.078-1.83-4.078-4.078 C10.922,14.112,11.211,13.292,11.693,12.622 M24.328,22.107c0,1.225-0.994,2.219-2.221,2.219H7.893 c-1.225,0-2.219-0.994-2.219-2.219v-9.486h3.459C8.832,13.356,8.664,14.159,8.664,15c0,3.494,2.842,6.335,6.336,6.335 s6.336-2.842,6.336-6.335c0-0.842-0.17-1.645-0.467-2.379h3.459V22.107z" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                    </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://www.flickr.com/jagabjenkova">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                 viewBox="0 0 50 50"
+                                 class="icon icons8-flickr-filled">
+                                <path style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;block-progression:tb;isolation:auto;mix-blend-mode:normal" d="M 9 4 C 6.2504839 4 4 6.2504839 4 9 L 4 41 C 4 43.749516 6.2504839 46 9 46 L 41 46 C 43.749516 46 46 43.749516 46 41 L 46 9 C 46 6.2504839 43.749516 4 41 4 L 9 4 z M 9 6 L 41 6 C 42.668484 6 44 7.3315161 44 9 L 44 41 C 44 42.668484 42.668484 44 41 44 L 9 44 C 7.3315161 44 6 42.668484 6 41 L 6 9 C 6 7.3315161 7.3315161 6 9 6 z M 16 17 C 11.59 17 8 20.59 8 25 C 8 29.41 11.59 33 16 33 C 20.41 33 24 29.41 24 25 C 24 20.59 20.41 17 16 17 z M 34 17 C 29.59 17 26 20.59 26 25 C 26 29.41 29.59 33 34 33 C 38.41 33 42 29.41 42 25 C 42 20.59 38.41 17 34 17 z" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible">
+                                </path>
+                            </svg>
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+        <div id="headerSmall">
+
+            <!--<img id="logo-small" width="153" height="24" src="content/layout/logo-small.jpg" />-->
+            <img id="logo-small" src="content/layout/logo2.png" />
+
+            <a id="menuButton">
+                <img id="smallMenuIcon" src="content/layout/icon-menu.png" />
+            </a>
+
+        </div>
+        <div id="smallMenu" style="display:none">
+            <ul>
+                <li><a href="#projects" id="projectsLink">Projects</a></li>
+                <li><a href="#about" id="aboutLink">About</a></li>
+                <li><a href="#contact" id="contactLink">Contact</a></li>
+                <li>
+                    <a target="_blank" href="https://www.facebook.com/bjenkova">
+                        Facebook
+                    </a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://instagram.com/bjenkova">
+                        Instagram
+                    </a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://www.flickr.com/jagabjenkova">
+                        Flickr
+                    </a>
+                </li>
+            </ul>
+            <div style="height:15px;"></div>
+        </div>
+
+
+        <div  id="container">
+            <!--<p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>
+            <p>Bla bla bla</p>-->
+        </div>
+
+
+        <div id="footer">
+                &copy; Jaga Bjeńkova
+        </div>
+        </div>    <!-- gallery plugin-->
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    >
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>
